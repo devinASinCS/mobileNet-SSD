@@ -1,0 +1,80 @@
+2022-10-11 13:50:58,544 - train_ssd.py[258] - INFO : Namespace(dataset_type='voc', datasets=['D:\\pytorch_ssd\\data\\VOCdevkit\\MAFA'], validation_dataset='D:\\pytorch_ssd\\data\\VOCdevkit\\MAFA', balance_data=False, gpu_ids='0', net='mb3l-ssd-lite', freeze_base_net=False, freeze_net=False, mb2_width_mult=1.0, mb3_width_mult=1.0, lr=0.01, momentum=0.9, weight_decay=0.0005, gamma=0.1, base_net_lr=None, extra_layers_lr=None, base_net=None, pretrained_ssd=None, resume=None, scheduler='cosine', milestones='80,100', t_max=200.0, batch_size=4, num_epochs=20, last_epoch=-1, num_workers=4, validation_epochs=5, checkbest_epochs=5, debug_steps=100, use_cuda=True, checkpoint_folder='./models/')
+2022-10-11 13:50:58,545 - train_ssd.py[273] - INFO : Use GPU 0([0]).
+2022-10-11 13:50:58,546 - train_ssd.py[308] - INFO : Prepare training datasets.
+2022-10-11 13:50:58,553 - voc_dataset.py[42] - INFO : VOC Labels read from file: ('BACKGROUND', 'incorrectly_masked_face', 'masked_face', 'unmasked_face', '')
+2022-10-11 13:50:58,555 - train_ssd.py[327] - INFO : Stored labels into file ./models/voc-model-labels.txt.
+2022-10-11 13:50:58,556 - train_ssd.py[329] - INFO : Train dataset size: 25876
+2022-10-11 13:50:58,556 - train_ssd.py[334] - INFO : Prepare Validation datasets.
+2022-10-11 13:50:58,560 - voc_dataset.py[42] - INFO : VOC Labels read from file: ('BACKGROUND', 'incorrectly_masked_face', 'masked_face', 'unmasked_face', '')
+2022-10-11 13:50:58,562 - train_ssd.py[342] - INFO : validation dataset size: 4935
+2022-10-11 13:50:58,562 - train_ssd.py[345] - INFO : Build network.
+2022-10-11 13:50:58,899 - train_ssd.py[398] - INFO : Took 0.00 seconds to load the model.
+2022-10-11 13:50:58,987 - train_ssd.py[409] - INFO : Learning rate: 0.01, Base net learning rate: 0.01, Extra Layers learning rate: 0.01.
+2022-10-11 13:50:58,988 - train_ssd.py[418] - INFO : Uses CosineAnnealingLR scheduler.
+2022-10-11 13:50:58,989 - train_ssd.py[430] - INFO : Model Save Folder In ./models/mb3l-ssd-lite-2210111350.
+2022-10-11 13:50:58,989 - train_ssd.py[431] - INFO : Start training from epoch 0.
+2022-10-11 13:51:30,231 - train_ssd.py[163] - INFO : Epoch: 0, Step: 100, Average Loss: 10.5354, Average Regression Loss 3.9108, Average Classification Loss: 6.6246 
+2022-10-11 13:51:44,701 - train_ssd.py[163] - INFO : Epoch: 0, Step: 200, Average Loss: 8.1944, Average Regression Loss 3.5545, Average Classification Loss: 4.6399 
+2022-10-11 13:51:58,584 - train_ssd.py[163] - INFO : Epoch: 0, Step: 300, Average Loss: 6.9779, Average Regression Loss 3.0437, Average Classification Loss: 3.9342 
+2022-10-11 13:52:12,315 - train_ssd.py[163] - INFO : Epoch: 0, Step: 400, Average Loss: 12.1023, Average Regression Loss 4.4048, Average Classification Loss: 7.6976 
+2022-10-11 13:52:25,925 - train_ssd.py[163] - INFO : Epoch: 0, Step: 500, Average Loss: 8.2207, Average Regression Loss 3.4543, Average Classification Loss: 4.7663 
+2022-10-11 13:52:40,284 - train_ssd.py[163] - INFO : Epoch: 0, Step: 600, Average Loss: 7.4717, Average Regression Loss 3.4728, Average Classification Loss: 3.9989 
+2022-10-11 13:52:54,143 - train_ssd.py[163] - INFO : Epoch: 0, Step: 700, Average Loss: 7.2565, Average Regression Loss 3.4180, Average Classification Loss: 3.8384 
+2022-10-11 13:53:10,828 - train_ssd.py[163] - INFO : Epoch: 0, Step: 800, Average Loss: 6.4299, Average Regression Loss 2.9760, Average Classification Loss: 3.4539 
+2022-10-11 13:53:29,263 - train_ssd.py[163] - INFO : Epoch: 0, Step: 900, Average Loss: 6.6290, Average Regression Loss 3.0702, Average Classification Loss: 3.5588 
+2022-10-11 13:53:43,634 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1000, Average Loss: 6.2672, Average Regression Loss 2.9197, Average Classification Loss: 3.3475 
+2022-10-11 13:53:57,760 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1100, Average Loss: 6.2191, Average Regression Loss 2.8742, Average Classification Loss: 3.3449 
+2022-10-11 13:54:12,473 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1200, Average Loss: 6.2526, Average Regression Loss 2.8956, Average Classification Loss: 3.3570 
+2022-10-11 13:54:26,328 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1300, Average Loss: 6.2424, Average Regression Loss 2.9322, Average Classification Loss: 3.3102 
+2022-10-11 13:54:42,989 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1400, Average Loss: 6.0522, Average Regression Loss 2.8302, Average Classification Loss: 3.2220 
+2022-10-11 13:54:57,687 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1500, Average Loss: 6.0841, Average Regression Loss 2.8299, Average Classification Loss: 3.2542 
+2022-10-11 13:55:12,772 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1600, Average Loss: 6.0398, Average Regression Loss 2.7917, Average Classification Loss: 3.2482 
+2022-10-11 13:55:26,850 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1700, Average Loss: 5.7389, Average Regression Loss 2.7498, Average Classification Loss: 2.9892 
+2022-10-11 13:55:41,222 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1800, Average Loss: 6.1138, Average Regression Loss 2.8536, Average Classification Loss: 3.2601 
+2022-10-11 13:55:55,480 - train_ssd.py[163] - INFO : Epoch: 0, Step: 1900, Average Loss: 6.0580, Average Regression Loss 2.8138, Average Classification Loss: 3.2442 
+2022-10-11 13:56:11,964 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2000, Average Loss: 6.4568, Average Regression Loss 2.9332, Average Classification Loss: 3.5237 
+2022-10-11 13:56:26,594 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2100, Average Loss: 5.6206, Average Regression Loss 2.5597, Average Classification Loss: 3.0609 
+2022-10-11 13:56:40,625 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2200, Average Loss: 5.7435, Average Regression Loss 2.7100, Average Classification Loss: 3.0336 
+2022-10-11 13:56:56,647 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2300, Average Loss: 5.6192, Average Regression Loss 2.6411, Average Classification Loss: 2.9782 
+2022-10-11 13:57:12,543 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2400, Average Loss: 5.6509, Average Regression Loss 2.5466, Average Classification Loss: 3.1043 
+2022-10-11 13:57:26,702 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2500, Average Loss: 5.3574, Average Regression Loss 2.4384, Average Classification Loss: 2.9190 
+2022-10-11 13:57:41,943 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2600, Average Loss: 5.7680, Average Regression Loss 2.6418, Average Classification Loss: 3.1262 
+2022-10-11 13:57:56,679 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2700, Average Loss: 5.3945, Average Regression Loss 2.4781, Average Classification Loss: 2.9164 
+2022-10-11 13:58:11,469 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2800, Average Loss: 5.4409, Average Regression Loss 2.5073, Average Classification Loss: 2.9336 
+2022-10-11 13:58:25,747 - train_ssd.py[163] - INFO : Epoch: 0, Step: 2900, Average Loss: 5.3729, Average Regression Loss 2.5024, Average Classification Loss: 2.8705 
+2022-10-11 13:58:39,284 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3000, Average Loss: 5.6841, Average Regression Loss 2.6912, Average Classification Loss: 2.9929 
+2022-10-11 13:58:53,754 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3100, Average Loss: 5.5685, Average Regression Loss 2.6202, Average Classification Loss: 2.9483 
+2022-10-11 13:59:08,501 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3200, Average Loss: 5.9950, Average Regression Loss 2.7327, Average Classification Loss: 3.2623 
+2022-10-11 13:59:22,398 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3300, Average Loss: 5.6119, Average Regression Loss 2.6208, Average Classification Loss: 2.9911 
+2022-10-11 13:59:35,772 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3400, Average Loss: 5.5891, Average Regression Loss 2.5850, Average Classification Loss: 3.0041 
+2022-10-11 13:59:49,347 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3500, Average Loss: 5.6943, Average Regression Loss 2.7278, Average Classification Loss: 2.9665 
+2022-10-11 14:00:03,222 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3600, Average Loss: 5.4112, Average Regression Loss 2.5047, Average Classification Loss: 2.9065 
+2022-10-11 14:00:20,922 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3700, Average Loss: 5.6153, Average Regression Loss 2.6062, Average Classification Loss: 3.0091 
+2022-10-11 14:00:34,326 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3800, Average Loss: 5.4768, Average Regression Loss 2.4790, Average Classification Loss: 2.9978 
+2022-10-11 14:00:48,628 - train_ssd.py[163] - INFO : Epoch: 0, Step: 3900, Average Loss: 5.4102, Average Regression Loss 2.4563, Average Classification Loss: 2.9539 
+2022-10-11 14:01:03,540 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4000, Average Loss: 5.3747, Average Regression Loss 2.4177, Average Classification Loss: 2.9571 
+2022-10-11 14:01:18,076 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4100, Average Loss: 5.3846, Average Regression Loss 2.5151, Average Classification Loss: 2.8696 
+2022-10-11 14:01:32,770 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4200, Average Loss: 5.3655, Average Regression Loss 2.4455, Average Classification Loss: 2.9199 
+2022-10-11 14:01:48,594 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4300, Average Loss: 5.5986, Average Regression Loss 2.5604, Average Classification Loss: 3.0383 
+2022-10-11 14:02:03,919 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4400, Average Loss: 5.3853, Average Regression Loss 2.4415, Average Classification Loss: 2.9437 
+2022-10-11 14:02:17,329 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4500, Average Loss: 5.2057, Average Regression Loss 2.3726, Average Classification Loss: 2.8331 
+2022-10-11 14:02:31,962 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4600, Average Loss: 5.2701, Average Regression Loss 2.3713, Average Classification Loss: 2.8988 
+2022-10-11 14:02:45,448 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4700, Average Loss: 5.2901, Average Regression Loss 2.4427, Average Classification Loss: 2.8474 
+2022-10-11 14:02:58,874 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4800, Average Loss: 5.1965, Average Regression Loss 2.3657, Average Classification Loss: 2.8308 
+2022-10-11 14:03:12,538 - train_ssd.py[163] - INFO : Epoch: 0, Step: 4900, Average Loss: 5.2441, Average Regression Loss 2.3174, Average Classification Loss: 2.9267 
+2022-10-11 14:03:25,800 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5000, Average Loss: 5.1846, Average Regression Loss 2.2353, Average Classification Loss: 2.9493 
+2022-10-11 14:03:41,191 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5100, Average Loss: 5.0544, Average Regression Loss 2.2363, Average Classification Loss: 2.8181 
+2022-10-11 14:03:54,500 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5200, Average Loss: 5.1952, Average Regression Loss 2.2970, Average Classification Loss: 2.8982 
+2022-10-11 14:04:08,169 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5300, Average Loss: 5.2258, Average Regression Loss 2.2822, Average Classification Loss: 2.9436 
+2022-10-11 14:04:21,872 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5400, Average Loss: 5.3450, Average Regression Loss 2.3689, Average Classification Loss: 2.9761 
+2022-10-11 14:04:37,321 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5500, Average Loss: 5.2501, Average Regression Loss 2.3556, Average Classification Loss: 2.8945 
+2022-10-11 14:04:52,274 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5600, Average Loss: 5.1964, Average Regression Loss 2.3253, Average Classification Loss: 2.8711 
+2022-10-11 14:05:06,190 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5700, Average Loss: 5.2511, Average Regression Loss 2.3673, Average Classification Loss: 2.8839 
+2022-10-11 14:05:19,702 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5800, Average Loss: 5.0119, Average Regression Loss 2.1229, Average Classification Loss: 2.8890 
+2022-10-11 14:05:33,197 - train_ssd.py[163] - INFO : Epoch: 0, Step: 5900, Average Loss: 4.9301, Average Regression Loss 2.1081, Average Classification Loss: 2.8220 
+2022-10-11 14:05:47,474 - train_ssd.py[163] - INFO : Epoch: 0, Step: 6000, Average Loss: 5.0300, Average Regression Loss 2.1962, Average Classification Loss: 2.8337 
+2022-10-11 14:06:03,423 - train_ssd.py[163] - INFO : Epoch: 0, Step: 6100, Average Loss: 5.1558, Average Regression Loss 2.1664, Average Classification Loss: 2.9894 
+2022-10-11 14:06:16,910 - train_ssd.py[163] - INFO : Epoch: 0, Step: 6200, Average Loss: 4.9003, Average Regression Loss 2.0385, Average Classification Loss: 2.8617 
+2022-10-11 14:06:30,332 - train_ssd.py[163] - INFO : Epoch: 0, Step: 6300, Average Loss: 4.8628, Average Regression Loss 2.0498, Average Classification Loss: 2.8130 
+2022-10-11 14:06:45,250 - train_ssd.py[163] - INFO : Epoch: 0, Step: 6400, Average Loss: 5.0365, Average Regression Loss 2.1103, Average Classification Loss: 2.9262 
+2022-10-11 14:06:56,518 - train_ssd.py[444] - INFO : Saved model ./models/mb3l-ssd-lite-2210111350\mb3l-ssd-lite-state-Epoch-0.pth
