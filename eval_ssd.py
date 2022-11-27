@@ -113,13 +113,13 @@ def compute_average_precision_per_class(num_true_cases, gt_boxes, difficult_case
                         false_positive[i] = 1
             else:
                 false_positive[i] = 1
-
+    print("precision: ",sum(true_positive)/(sum(true_positive) + sum(false_positive)))
     true_positive = true_positive.cumsum()
     false_positive = false_positive.cumsum()
     precision = true_positive / (true_positive + false_positive)
     recall = true_positive / num_true_cases
     if use_2007_metric:
-        return measurements.compute_voc2007_average_precision(precision, recall)
+        return measurements.compute_voc2007_average_precision(precision, recall), precision, recall
     else:
         return measurements.compute_average_precision(precision, recall)
 
@@ -215,12 +215,14 @@ if __name__ == '__main__':
                     file=f
                 )
     aps = []
+    precisions = []
+    recalls = []
     print("\n\nAverage Precision Per-class:")
     for class_index, class_name in enumerate(class_names):
         if class_index == 0:
             continue
         prediction_path = eval_path / f"det_test_{class_name}.txt"
-        ap = compute_average_precision_per_class(
+        ap, precision, recall = compute_average_precision_per_class(
             true_case_stat[class_index],
             all_gb_boxes[class_index],
             all_difficult_cases[class_index],
@@ -229,9 +231,21 @@ if __name__ == '__main__':
             args.use_2007_metric
         )
         aps.append(ap)
+        precisions.append(precision)
+        recalls.append(recall)
         print(f"{class_name}: {ap}")
 
-    print(f"\nAverage Precision Across All Classes:{sum(aps)/len(aps)}")
+        
+    # print("yoyoyo: ",precisions)
+    # print("\n",precisions[0], " ,len: ", len(precisions[0]), " ,sum: ", sum(precisions[0]))
+
+    # print("\n", recalls, " ", sum(recalls), " ", len(recalls))
+    # F1 = 2 / ((1 / (sum(recalls)/len(recalls)))+(1 / (sum(precisions)/len(precisions))))
+
+    print(f"\nmAP: {sum(aps)/len(aps)}")
+    # print(f"\nPrecision: {sum(precisions)/len(precisions)}")
+    # print(f"\nRecall: {sum(recalls)/len(recalls)}")
+    # print(f"\nF1 Score: {F1}")
 
 
 

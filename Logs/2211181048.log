@@ -1,6 +1,0 @@
-2022-11-18 10:48:21,414 - train_ssd.py[130] - INFO : Use Cuda.
-2022-11-18 10:48:21,422 - train_ssd.py[246] - INFO : Namespace(balance_data=False, base_net=None, base_net_lr=None, batch_size=10, checkbest_epochs=5, checkpoint_folder='./models/', dataset_type='voc', datasets=['D:\\pytorch_ssd\\data\\VOCdevkit\\mask_datas'], debug_steps=100, extra_layers_lr=None, freeze_base_net=False, freeze_net=False, gamma=0.1, gpu_ids='0', last_epoch=-1, lr=0.001, mb2_width_mult=1.0, mb3_width_mult=1.0, milestones='80,100', momentum=0.9, net='mb3l-ssd-lite', num_epochs=120, num_workers=1, pretrained_ssd=None, resume=None, scheduler='multi-step', t_max=120, use_cuda=True, validation_dataset='D:\\pytorch_ssd\\data\\VOCdevkit\\mask_datas', validation_epochs=5, weight_decay=0.0005)
-2022-11-18 10:48:21,425 - train_ssd.py[265] - INFO : Prepare training datasets.
-2022-11-18 10:48:21,449 - voc_dataset.py[42] - INFO : VOC Labels read from file: ('BACKGROUND', 'incorrectly_masked_face', 'masked_face', 'unmasked_face', '')
-2022-11-18 10:48:21,453 - train_ssd.py[278] - INFO : Stored labels into file ./models/voc-model-labels.txt.
-2022-11-18 10:48:21,453 - train_ssd.py[279] - INFO : Train dataset size: 37507

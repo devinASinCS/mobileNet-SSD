@@ -4,6 +4,7 @@ import logging
 import sys
 import itertools
 import time
+import matplotlib.pyplot as plt
 
 import torch
 from torch.utils.data import DataLoader, ConcatDataset, WeightedRandomSampler
@@ -130,18 +131,26 @@ if args.use_cuda and torch.cuda.is_available():
     logger.info("Use Cuda.")
 
 
-def train(loader, net, criterion, optimizer, device, debug_steps=50, epoch=-1):
+def train(loader, net, criterion, optimizer, device, sampleNum, debug_steps=50, epoch=-1):
     net.train(True)
     running_loss = 0.0
     running_regression_loss = 0.0
     running_classification_loss = 0.0
-
+    epoch_loss = 0.0
+    num = 0
+    
     for i, data in enumerate(loader):
 
         images, boxes, labels = data
         images = images.to(device)
         boxes = boxes.to(device)
         labels = labels.to(device)
+
+
+        sampleNum[0] += torch.sum(labels == 0)
+        sampleNum[1] += torch.sum(labels == 1)
+        sampleNum[2] += torch.sum(labels == 2)
+        sampleNum[3] += torch.sum(labels == 3)
 
         optimizer.zero_grad()
         confidence, locations = net(images)
@@ -157,6 +166,8 @@ def train(loader, net, criterion, optimizer, device, debug_steps=50, epoch=-1):
             avg_loss = running_loss / debug_steps
             avg_reg_loss = running_regression_loss / debug_steps
             avg_clf_loss = running_classification_loss / debug_steps
+            epoch_loss += avg_loss
+            num += 1
             logger.info(
                 f"Epoch: {epoch}, Step: {i}, " +
                 f"Average Loss: {avg_loss:.4f}, " +
@@ -164,46 +175,13 @@ def train(loader, net, criterion, optimizer, device, debug_steps=50, epoch=-1):
                 f"Average Classification Loss: {avg_clf_loss:.4f} "
             )
 
+
             running_loss = 0.0
             running_regression_loss = 0.0
             running_classification_loss = 0.0
+    
+    return epoch_loss / num
 
-
-def res_test(dataset, net, device):
-    config = mobilenetv1_ssd_config
-    criterion = MultiboxLoss(config.priors, iou_threshold=0.5, neg_pos_ratio=3,
-                             center_variance=0.1, size_variance=0.2, device=device)
-    target_transform = MatchPrior(config.priors, config.center_variance, config.size_variance, 0.5)
-    test_transform = TestTransform(config.image_size, config.image_mean, config.image_std)
-    val_dataset = SKUDataset(dataset, transform=test_transform,
-                             target_transform=target_transform, mode='1')
-    loader = DataLoader(val_dataset, args.batch_size, num_workers=args.num_workers, shuffle=False)
-
-    net.eval()
-    running_loss = 0.0
-    running_regression_loss = 0.0
-    running_classification_loss = 0.0
-    num = 0
-    for i, data in enumerate(loader):
-
-        images, boxes, labels = data
-        images = images.to(device)
-        boxes = boxes.to(device)
-        labels = labels.to(device)
-        num += 1
-
-        with torch.no_grad():
-            confidence, locations = net(images)
-            regression_loss, classification_loss = criterion(confidence, locations, labels, boxes)
-            loss = regression_loss + classification_loss
-
-        running_loss += loss.item()
-        running_regression_loss += regression_loss.item()
-        running_classification_loss += classification_loss.item()
-        if i % 50 == 0:
-            logger.info(f"Step: {i} in Test - loss : {loss}. ")
-
-    return running_loss / num, running_regression_loss / num, running_classification_loss / num
 
 def test(loader, net, criterion, device, net_test):
 
@@ -227,15 +205,16 @@ def test(loader, net, criterion, device, net_test):
 
         with torch.no_grad():
             confidence, locations = net(images)
+            # print(confidence, " with ", labels)
             regression_loss, classification_loss = criterion(confidence, locations, labels, boxes)
             loss = regression_loss + classification_loss
 
         running_loss += loss.item()
         running_regression_loss += regression_loss.item()
         running_classification_loss += classification_loss.item()
-        if i % 50 == 0:
+        if i % 100 == 0:
             logger.info(f"Step: {i} in Test - loss : {loss}. ")
-
+    
 
     return running_loss / num, running_regression_loss / num, running_classification_loss / num
 
@@ -244,6 +223,23 @@ if __name__ == '__main__':
     timer = Timer()
     writer = SummaryWriter(f'./Logs/{args.net}-{current_time}')
     logger.info(args)
+
+    str_ids = args.gpu_ids.split(',')
+    args.gpu_ids = []
+    for str_id in str_ids:
+        id = int(str_id)
+        if id >= 0:
+            args.gpu_ids.append(id)
+    if len(args.gpu_ids) == 0:
+        DEVICE = torch.device("cpu")
+    else:
+        DEVICE = args.gpu_ids[0]
+    if torch.cuda.device_count()==1 and DEVICE != 0:
+        print(f"GPU device {DEVICE} is not supported.")
+    if torch.cuda.device_count() < len(args.gpu_ids):
+        print(f"GPU device num {len(args.gpu_ids)} is not supported.")
+    logger.info(f"Use GPU {DEVICE}({args.gpu_ids}).")
+
 
     if args.net == 'mb3l-ssd-lite':
         create_net = lambda num: create_mobilenetv3_ssd_lite(num, model_mode="LARGE",
@@ -267,11 +263,11 @@ if __name__ == '__main__':
     for dataset_path in args.datasets:
         if args.dataset_type == 'voc':
             dataset = VOCDataset(dataset_path, transform=train_transform,
-                                 target_transform=target_transform)
-            dataset = dataset
+                                    target_transform=target_transform)
+            # dataset = dataset
             label_file = os.path.join(args.checkpoint_folder, "voc-model-labels.txt")
             store_labels(label_file, dataset.class_names)
-            num_classes = len(dataset.class_names)        
+            num_classes = len(dataset.class_names)   
         else:
             raise ValueError(f"Dataset tpye {args.dataset_type} is not supported.")
         
@@ -297,16 +293,12 @@ if __name__ == '__main__':
                               num_workers=args.num_workers,
                               drop_last=True,
                               sampler=sampler)
-    num1 = 0
-    num2 = 0 
-    num3 = 0
-    for epoch in range(10):
-        for img, box, label in train_loader:
-            num1 += torch.sum(label == 1)
-            num2 += torch.sum(label == 2)
-            num3 += torch.sum(label == 3)
-    print(num1," ",num2," ",num3)
-    exit()
+    # train_loader = DataLoader(dataset, args.batch_size,
+    #                           num_workers=args.num_workers,
+    #                           drop_last=True,
+    #                           shuffle=True
+    #                           )
+    
     logger.info("Prepare Validation datasets.")
     if args.dataset_type == "voc":
         val_dataset = VOCDataset(args.validation_dataset, transform=test_transform,
@@ -397,6 +389,15 @@ if __name__ == '__main__':
         parser.print_help(sys.stderr)
         sys.exit(1)
 
+    y_loss = {}
+    y_loss['train'] = []
+    y_loss['val'] = []
+    x_epoch = []
+    fig = plt.figure()
+    ax0 = fig.add_subplot(121, title="loss")
+
+    sample_Num = [0,0,0,0]
+
     model_save_folder = os.path.join(args.checkpoint_folder, f"{args.net}-{current_time}")
     if not os.path.exists(model_save_folder):
         os.mkdir(model_save_folder)
@@ -404,7 +405,7 @@ if __name__ == '__main__':
     logger.info(f"Start training from epoch {last_epoch + 1}.")
     for epoch in range(last_epoch + 1, args.num_epochs):
         print(f'Train:{epoch}')
-        train(train_loader, net, criterion, optimizer, device=DEVICE, debug_steps=args.debug_steps, epoch=epoch)
+        train_loss = train(train_loader, net, criterion, optimizer, device=DEVICE, debug_steps=args.debug_steps, epoch=epoch, sampleNum=sample_Num)
         scheduler.step()
 
         if epoch % args.checkbest_epochs == 0 or epoch == args.num_epochs - 1: #checkbest_epochsvalidation_epochs
@@ -416,16 +417,25 @@ if __name__ == '__main__':
                 torch.save(net.cpu().state_dict(), model_state_path)
             logger.info(f"Saved model {model_state_path}")
 
-            val_loss, val_regression_loss, val_classification_loss = test(val_loader,
-                                                                            net,
-                                                                            criterion,
-                                                                            DEVICE,
-                                                                            net_test
-                                                                            )
-            logger.info(
-                f"Epoch: {epoch}, " +
-                f"Loss: {val_loss:.4f}({best_val_loss}), " + # Validation
-                f"Regression Loss {val_regression_loss:.4f}, " +
-                f"Classification Loss: {val_classification_loss:.4f}"
-            )
+        val_loss, val_regression_loss, val_classification_loss = test(val_loader,
+                                                                        net,
+                                                                        criterion,
+                                                                        DEVICE,
+                                                                        net_test
+                                                                        )
+        # count, correct, wrong, miss = detec_rate.detec_rate(net_test, val_dataset.class_names, val_dataset, DEVICE)
+        logger.info(
+            f"Epoch: {epoch}, " +
+            f"Loss: {val_loss:.4f}({best_val_loss}), " + # Validation
+            f"Regression Loss {val_regression_loss:.4f}, " +
+            f"Classification Loss: {val_classification_loss:.4f}"
+        )
+        print(i for i in sample_Num)
+        y_loss['train'].append(train_loss)
+        y_loss['val'].append(val_loss)
+        x_epoch.append(epoch)
+        ax0.plot(x_epoch, y_loss['train'], 'b-', label='train')
+        ax0.plot(x_epoch, y_loss['val'], 'r-', label='val')
+        fig.savefig(os.path.join('./lossGraphs', 'train.jpg'))
+
     writer.close()

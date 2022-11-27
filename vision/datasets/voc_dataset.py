@@ -24,7 +24,7 @@ class VOCDataset:
         self.keep_difficult = keep_difficult
 
         # if the labels file exists, read in the class names
-        label_file_name = self.root / "labels.txt"
+        label_file_name = self.root / "labelsss.txt"
 
         if os.path.isfile(label_file_name):
             class_string = ""
@@ -43,8 +43,8 @@ class VOCDataset:
 
         else:
             logging.info("No labels file, using default VOC classes.")
-            self.class_names = ('BACKGROUND',
-            'masked_face', 'unmasked_face', 'incorrectly_masked_face')
+            self.class_names = ('BACKGROUND', 'incorrectly_masked_face',
+            'masked_face', 'unmasked_face')
 
 
         self.class_dict = {class_name: i for i, class_name in enumerate(self.class_names)}
@@ -114,8 +114,8 @@ class VOCDataset:
                 labels.append(self.class_dict[class_name])
                 is_difficult_str = object.find('difficult').text
                 is_difficult.append(int(is_difficult_str) if is_difficult_str else 0)
-            else:
-                print('get annotation not in class_dict :', class_name)
+            # else:
+            #     print('get annotation not in class_dict :', class_name)
 
         # print('get annotation return : ',boxes, labels, is_difficult)
         return (np.array(boxes, dtype=np.float32),

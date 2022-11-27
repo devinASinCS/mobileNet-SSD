@@ -52,6 +52,7 @@ while True:
     for i in range(boxes.size(0)):
         box = boxes[i, :]
         label = f"{class_names[labels[i]]}: {probs[i]:.2f}"
+        print("Object: ", labels[i].item())##here
         cv2.rectangle(orig_image, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), colors[labels[i]-1], 4)
 
         cv2.putText(orig_image, label,
