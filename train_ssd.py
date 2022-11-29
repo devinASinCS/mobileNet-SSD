@@ -183,7 +183,7 @@ def train(loader, net, criterion, optimizer, device, sampleNum, debug_steps=50, 
     return epoch_loss / num
 
 
-def test(loader, net, criterion, device, net_test):
+def test(loader, dataset, net, criterion, device, net_test):
 
     net_state = net.state_dict()
     net_test.load_state_dict(net_state, False)
@@ -214,9 +214,11 @@ def test(loader, net, criterion, device, net_test):
         running_classification_loss += classification_loss.item()
         if i % 100 == 0:
             logger.info(f"Step: {i} in Test - loss : {loss}. ")
+
+        aps = mAP.mAP(dataset, net_test, device)
     
 
-    return running_loss / num, running_regression_loss / num, running_classification_loss / num
+    return running_loss / num, running_regression_loss / num, running_classification_loss / num, aps
 
 
 if __name__ == '__main__':
@@ -302,7 +304,7 @@ if __name__ == '__main__':
     logger.info("Prepare Validation datasets.")
     if args.dataset_type == "voc":
         val_dataset = VOCDataset(args.validation_dataset, transform=test_transform,
-                                 target_transform=target_transform, is_test=True)
+                                 target_transform=target_transform, is_test=True, is_val=True)
     
     logger.info("validation dataset size: {}".format(len(val_dataset)))
     val_loader = DataLoader(val_dataset, args.batch_size,num_workers=args.num_workers,shuffle=False)
@@ -394,7 +396,11 @@ if __name__ == '__main__':
     y_loss['val'] = []
     x_epoch = []
     fig = plt.figure()
-    ax0 = fig.add_subplot(121, title="loss")
+    ax0 = fig.add_subplot(111, title="loss")
+
+    y_map = []
+    map_fig = plt.figure()
+    ax1 = map_fig.add_subplot(111, title="mAP")
 
     sample_Num = [0,0,0,0]
 
@@ -417,18 +423,21 @@ if __name__ == '__main__':
                 torch.save(net.cpu().state_dict(), model_state_path)
             logger.info(f"Saved model {model_state_path}")
 
-        val_loss, val_regression_loss, val_classification_loss = test(val_loader,
+        val_loss, val_regression_loss, val_classification_loss, aps = test(val_loader,
+                                                                        val_dataset,
                                                                         net,
                                                                         criterion,
                                                                         DEVICE,
                                                                         net_test
                                                                         )
-        # count, correct, wrong, miss = detec_rate.detec_rate(net_test, val_dataset.class_names, val_dataset, DEVICE)
+        map = sum(aps) / len(aps)
+        y_map.append(map)
         logger.info(
             f"Epoch: {epoch}, " +
             f"Loss: {val_loss:.4f}({best_val_loss}), " + # Validation
             f"Regression Loss {val_regression_loss:.4f}, " +
-            f"Classification Loss: {val_classification_loss:.4f}"
+            f"Classification Loss: {val_classification_loss:.4f}" +
+            f"mAP: {map:.4f}"
         )
         print(i for i in sample_Num)
         y_loss['train'].append(train_loss)
@@ -436,6 +445,9 @@ if __name__ == '__main__':
         x_epoch.append(epoch)
         ax0.plot(x_epoch, y_loss['train'], 'b-', label='train')
         ax0.plot(x_epoch, y_loss['val'], 'r-', label='val')
-        fig.savefig(os.path.join('./lossGraphs', 'train.jpg'))
+        fig.savefig(os.path.join('./lossGraphs', 'train_loss.jpg'))
+
+        ax1.plot(x_epoch, y_map, label='mAP')
+        fig.savefig(os.path.join('./lossGraphs', 'train_mAP.jpg'))
 
     writer.close()

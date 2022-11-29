@@ -7,7 +7,7 @@ import os
 
 class VOCDataset:
 
-    def __init__(self, root, transform=None, target_transform=None, is_test=False, keep_difficult=False, label_file=None):
+    def __init__(self, root, transform=None, target_transform=None, is_test=False, keep_difficult=False, label_file=None, is_val=False):
         """Dataset for VOC data.
         Args:
             root: the root of the VOC2007 or VOC2012 dataset, the directory contains the following sub-directories:
@@ -19,7 +19,9 @@ class VOCDataset:
         if is_test:
             image_sets_file = self.root / "ImageSets/Main/test.txt"
         else:
-            image_sets_file = self.root / "ImageSets/Main/trainval.txt"
+            image_sets_file = self.root / "ImageSets/Main/train.txt"
+        if is_val:
+            image_sets_file = self.root / "ImageSets/Main/val.txt"
         self.ids = VOCDataset._read_image_ids(image_sets_file)
         self.keep_difficult = keep_difficult
 
